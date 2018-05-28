@@ -143,6 +143,46 @@ module Renoir
       call(command, *args, &block)
     end
 
+    def keys(matcher = '*')
+      keys = []
+      each_node do |node|
+        keys += node.keys(matcher)
+      end
+      keys
+    end
+
+    def info
+      results = []
+      each_node do |node|
+        results << node.info
+      end
+      results
+    end
+
+    def flushdb
+      results = []
+      each_node do |node|
+        results << node.flushdb
+      end
+      results
+    end
+
+    def mget(*args)
+      results = []
+      args.each do |arg|
+        results << get(arg)
+      end
+      results
+    end
+
+    def reconnect
+      results = []
+      each_node do |node|
+        results << node.reconnect if node.respond_to?(:reconnect)
+      end
+      results
+    end
+
     private
 
     def key_slot(key)
